@@ -1,0 +1,18 @@
+# Ignore IntelliJ IDEA configuration folder
+.idea/
+
+# Ignore all .iml files
+*.iml
+
+# Ignore folder with compiled classes and other build artifacts
+target/
+
+# Ignore folder with generated code (if applicable)
+generated/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore the Maven wrapper and settings directory (if you use Maven)
+/.mvn/
