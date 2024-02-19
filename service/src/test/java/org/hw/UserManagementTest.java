@@ -5,38 +5,52 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hw.entity.User;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserManagementTest {
 
     private SessionFactory sessionFactory;
+    private Session session;
     private final String emailTest = "email@test.com";
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    void setUpClass() {
         Configuration configuration = new Configuration().configure();
         sessionFactory = configuration.buildSessionFactory();
     }
 
+    @BeforeEach
+    void setUp() {
+        session = sessionFactory.openSession();
+    }
+
     @AfterEach
     void tearDown() {
-        deleteUserByEmail(emailTest);
+        if (session != null) {
+            session.close();
+        }
+    }
 
+    @AfterAll
+    void tearDownClass() {
         if (sessionFactory != null) {
             sessionFactory.close();
         }
     }
 
     @Test
-    void testUserCreation() {
-
+    void shouldCreateUserSuccessfully() {
         assertNull(getUserByEmail("email@test.com"));
 
         addUser("Test", "Testov", emailTest, "testpass", true);
@@ -47,49 +61,53 @@ public class UserManagementTest {
         assertEquals("Test", user.getFirstName());
         assertEquals("Testov", user.getLastName());
         assertTrue(user.getEnabled());
+
+        deleteUserByEmail(emailTest);
     }
 
     private void addUser(String firstName, String lastName, String email, String password, boolean enabled) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
 
-            User newUser = new User();
-            newUser.setFirstName(firstName);
-            newUser.setLastName(lastName);
-            newUser.setEmail(email);
-            newUser.setPassword(password);
-            newUser.setEnabled(enabled);
+            User newUser = User.builder()
+                    .firstName(firstName)
+                    .lastName(lastName)
+                    .email(email)
+                    .password(password)
+                    .enabled(enabled).build();
 
-            session.save(newUser);
+            session.persist(newUser);
             transaction.commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw e;
         }
     }
 
     private User getUserByEmail(String email) {
-        User user = null;
-        try (Session session = sessionFactory.openSession()) {
-            user = session.createQuery("from User where email = :email", User.class)
-                    .setParameter("email", email)
-                    .uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return user;
+        return session.createQuery("from User where email = :email", User.class)
+                .setParameter("email", email)
+                .uniqueResult();
     }
 
     private void deleteUserByEmail(String email) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
             User userToDelete = session.createQuery("from User where email = :email", User.class)
                     .setParameter("email", email)
                     .uniqueResult();
             if (userToDelete != null) {
-                session.delete(userToDelete);
+                session.remove(userToDelete);
                 transaction.commit();
             }
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
         }
     }
