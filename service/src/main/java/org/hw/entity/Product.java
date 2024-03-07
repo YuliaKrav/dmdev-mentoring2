@@ -9,20 +9,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(exclude = {"id", "category", "brand", "countryOfOrigin", "orders"})
+@ToString(exclude = {"category", "brand", "countryOfOrigin", "orders"})
 @Entity
 @Table(name = "products")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Product {
 
     @Id
@@ -51,12 +55,10 @@ public class Product {
     private Integer unitsInStock;
 
     @Column(name = "date_created")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreated;
+    private LocalDateTime dateCreated;
 
     @Column(name = "last_updated")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdated;
+    private LocalDateTime lastUpdated;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")

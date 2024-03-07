@@ -9,17 +9,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(exclude = {"id", "order", "product"})
+@ToString(exclude = {"order", "product"})
 @Entity
 @Table(name = "order_items")
-@Getter
-@Setter
-@NoArgsConstructor
 public class OrderItem {
 
     @Id
