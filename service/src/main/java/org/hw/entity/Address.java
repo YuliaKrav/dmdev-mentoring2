@@ -9,15 +9,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(exclude = {"id", "city", "stateProvince", "country"})
+@ToString(exclude = {"city", "stateProvince", "country"})
 @Entity
 @Table(name = "addresses")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Address {
 
     @Id

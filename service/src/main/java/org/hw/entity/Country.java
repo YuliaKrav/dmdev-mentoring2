@@ -8,18 +8,24 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(exclude = {"id", "products"})
+@ToString(exclude = {"products"})
 @Entity
 @Table(name = "countries")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Country {
 
     @Id
@@ -32,6 +38,7 @@ public class Country {
     @Column(name = "code")
     private String code;
 
+    @Builder.Default
     @OneToMany(mappedBy = "countryOfOrigin", fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
 }

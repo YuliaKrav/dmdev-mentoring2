@@ -10,18 +10,24 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(exclude = {"id", "country", "cities"})
+@ToString(exclude = {"country", "cities"})
 @Entity
 @Table(name = "states_provinces")
-@Getter
-@Setter
-@NoArgsConstructor
 public class StateProvince {
 
     @Id
@@ -35,6 +41,7 @@ public class StateProvince {
     @JoinColumn(name = "country_id")
     private Country country;
 
+    @Builder.Default
     @OneToMany(mappedBy = "stateProvince", fetch = FetchType.LAZY)
     private List<City> cities = new ArrayList<>();
 }

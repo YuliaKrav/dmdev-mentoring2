@@ -8,18 +8,24 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(exclude = {"id", "products"})
+@ToString(exclude = {"products"})
 @Entity
 @Table(name = "products_categories")
-@Getter
-@Setter
-@NoArgsConstructor
 public class ProductCategory {
 
     @Id
@@ -29,6 +35,7 @@ public class ProductCategory {
     @Column(name = "category_name")
     private String categoryName;
 
+    @Builder.Default
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
 }

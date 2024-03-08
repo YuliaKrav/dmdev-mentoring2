@@ -9,15 +9,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(exclude = {"id", "product", "user"})
+@ToString(exclude = {"product", "user"})
 @Entity
 @Table(name = "reviews")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Review {
 
     @Id
@@ -32,6 +40,9 @@ public class Review {
 
     @Column(name = "rating")
     private Integer rating;
+
+    @Column(name = "date_created")
+    private LocalDateTime dateCreated;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
