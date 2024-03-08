@@ -12,8 +12,7 @@ public class RoleCrudManagementIT extends HibernateTestBase {
     private Role newRole;
 
     @BeforeEach
-    public void setUp() {
-        super.setUp();
+    void init() {
         newRole = testEntityGenerator.createAndPersistRole(RoleName.ADMIN);
     }
 

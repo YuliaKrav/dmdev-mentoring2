@@ -17,9 +17,7 @@ public class OrderCrudManagementIT extends HibernateTestBase {
     private Order newOrder;
 
     @BeforeEach
-    @Override
-    public void setUp() {
-        super.setUp();
+    void init() {
         newOrder = createTestOrder();
     }
 

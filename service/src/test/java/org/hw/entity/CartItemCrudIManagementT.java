@@ -22,8 +22,7 @@ public class CartItemCrudIManagementT extends HibernateTestBase {
     private User user;
 
     @BeforeEach
-    public void setUp() {
-        super.setUp();
+    void init() {
         product1 = testEntityGenerator.createAndPersistProduct("Espresso", "ESP230", "Short description of Espresso",
                 "Full description of Espresso", new BigDecimal("2.99"), "http://images.com/espresso.jpg",
                 100, LocalDateTime.now(), LocalDateTime.now(), null, null, null);

@@ -17,8 +17,7 @@ public class ProductAnalogCrudManagementIT extends HibernateTestBase {
     private Product fanta;
 
     @BeforeEach
-    public void setUp() {
-        super.setUp();
+    void init() {
         createTestProductAnalogs();
     }
 
